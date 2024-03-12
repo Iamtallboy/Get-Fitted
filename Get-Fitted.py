@@ -1,33 +1,37 @@
 import streamlit as st
 
-def calculate_body_measurements(height):
-    # Constants for body proportions (can be adjusted based on standard ratios)
-    shoulder_width_ratio = 0.2
-    waist_ratio = 0.45
-    hip_ratio = 0.45
-    inseam_ratio = 0.45
-    
-    # Calculate body measurements based on height
-    shoulder_width = height * shoulder_width_ratio
-    waist = height * waist_ratio
-    hip = height * hip_ratio
-    inseam = height * inseam_ratio
-    
-    return shoulder_width, waist, hip, inseam
-
 def main():
-    st.title("Body Measurements Calculator")
-    st.write("Enter your height (in inches) to calculate body measurements.")
-    
-    height = st.number_input("Height (in inches)", min_value=56, max_value=87, value=65, step=1)
-    gender = st.selectbox("Gender", ["Male", "Female"])
-    
-    if st.button("Calculate Measurements"):
-        shoulder_width, waist, hip, inseam = calculate_body_measurements(height)
-        st.write(f"**Shoulder Width:** {shoulder_width:.2f} inches")
-        st.write(f"**Waist:** {waist:.2f} inches")
-        st.write(f"**Hip:** {hip:.2f} inches")
-        st.write(f"**Inseam:** {inseam:.2f} inches")
+    st.title("Custom Suit Fitting App")
+    st.write("Enter individual measurements for customers.")
+
+    # Image URLs for each measurement entry
+    measurement_images = {
+        "Out Seam": "https://example.com/out_seam_image.png",
+        "Chest": "https://example.com/chest_image.png",
+        "Coat Sleeve": "https://example.com/coat_sleeve_image.png",
+        "Pant Waist": "https://example.com/pant_waist_image.png",
+        "Coat Length": "https://example.com/coat_length_image.png",
+        "Wrist": "https://example.com/wrist_image.png",
+        "Calf": "https://example.com/calf_image.png",
+        "Bicep": "https://example.com/bicep_image.png",
+        "Armpit": "https://example.com/armpit_image.png",
+        "Pant Seat": "https://example.com/pant_seat_image.png",
+        "Incline": "https://example.com/incline_image.png"
+    }
+
+    # Input fields for each measurement
+    for measurement, image_url in measurement_images.items():
+        st.subheader(measurement)
+        st.image(image_url, use_column_width=True)
+        measurement_value = st.number_input(f"Enter {measurement} measurement:", step=0.1)
+        
+        # Save measurement to database or file upon submission
+        # For now, let's just display the entered value
+        st.write(f"You entered {measurement}: {measurement_value}")
+
+    if st.button("Save Measurements"):
+        # Logic to capture and save measurements (e.g., to a database or file)
+        st.success("Measurements saved successfully!")
 
 if __name__ == "__main__":
     main()
