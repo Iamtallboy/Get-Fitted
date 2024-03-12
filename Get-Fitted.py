@@ -1,5 +1,6 @@
 import streamlit as st
 import sqlite3
+import pandas as pd
 
 # Create a connection to the SQLite database
 conn = sqlite3.connect('customer_data.db')
@@ -98,6 +99,10 @@ def save_data(first_name, last_name, phone_number, email_address, social_media_h
     c.execute("INSERT INTO customer_data (first_name, last_name, phone_number, email_address, social_media_handle, measurements, satisfaction_level) VALUES (?, ?, ?, ?, ?, ?, ?)",
               (first_name, last_name, phone_number, email_address, social_media_handle, measurements_str, satisfaction_level))
     conn.commit()
+
+    # Export data to CSV file
+    df = pd.read_sql_query("SELECT * FROM customer_data", conn)
+    df.to_csv("customer_data.csv", index=False)
 
 if __name__ == "__main__":
     main()
