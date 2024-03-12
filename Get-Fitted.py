@@ -5,39 +5,26 @@ def main():
     st.write("Enter individual measurements for customers.")
 
     measurements = {
-        "Out Seam": "",
-        "Chest": "",
-        "Coat Sleeve": "",
-        "Pant Waist": "",
-        "Coat Length": "",
-        "Wrist": "",
-        "Calf": "",
-        "Bicep": "",
-        "Armpit": "",
-        "Pant Seat": "",
-        "Incline": ""
+        "Out Seam": None,
+        "Chest": None,
+        "Coat Sleeve": None,
+        "Pant Waist": None,
+        "Coat Length": None,
+        "Wrist": None,
+        "Calf": None,
+        "Bicep": None,
+        "Armpit": None,
+        "Pant Seat": None,
+        "Incline": None
     }
 
-    # Image URLs for each measurement entry
-    measurement_images = {
-        "Out Seam": "https://example.com/out_seam_image.png",
-        "Chest": "https://example.com/chest_image.png",
-        "Coat Sleeve": "https://example.com/coat_sleeve_image.png",
-        "Pant Waist": "https://example.com/pant_waist_image.png",
-        "Coat Length": "https://example.com/coat_length_image.png",
-        "Wrist": "https://example.com/wrist_image.png",
-        "Calf": "https://example.com/calf_image.png",
-        "Bicep": "https://example.com/bicep_image.png",
-        "Armpit": "https://example.com/armpit_image.png",
-        "Pant Seat": "https://example.com/pant_seat_image.png",
-        "Incline": "https://example.com/incline_image.png"
-    }
-
-    # Input fields for each measurement
-    for measurement, image_url in measurement_images.items():
+    # Input fields for each measurement and upload image
+    for measurement, _ in measurements.items():
         st.subheader(measurement)
-        st.image(image_url, use_column_width=True)
         measurements[measurement] = st.number_input(f"Enter {measurement} measurement (in inches):", step=0.1)
+        uploaded_image = st.file_uploader(f"Upload image for {measurement}:", type=["jpg", "jpeg", "png"])
+        if uploaded_image is not None:
+            st.image(uploaded_image, caption=f"Uploaded image for {measurement}", use_column_width=True)
 
     st.subheader("Customer Satisfaction Survey")
     satisfaction_level = st.slider("How easy was the process for the customer? (1 - Very Difficult, 5 - Very Easy)", min_value=1, max_value=5)
