@@ -4,6 +4,20 @@ def main():
     st.title("Custom Suit Fitting App")
     st.write("Enter individual measurements for customers.")
 
+    measurements = {
+        "Out Seam": "",
+        "Chest": "",
+        "Coat Sleeve": "",
+        "Pant Waist": "",
+        "Coat Length": "",
+        "Wrist": "",
+        "Calf": "",
+        "Bicep": "",
+        "Armpit": "",
+        "Pant Seat": "",
+        "Incline": ""
+    }
+
     # Image URLs for each measurement entry
     measurement_images = {
         "Out Seam": "https://example.com/out_seam_image.png",
@@ -23,15 +37,21 @@ def main():
     for measurement, image_url in measurement_images.items():
         st.subheader(measurement)
         st.image(image_url, use_column_width=True)
-        measurement_value = st.number_input(f"Enter {measurement} measurement:", step=0.1)
-        
-        # Save measurement to database or file upon submission
-        # For now, let's just display the entered value
-        st.write(f"You entered {measurement}: {measurement_value}")
+        measurements[measurement] = st.number_input(f"Enter {measurement} measurement (in inches):", step=0.1)
 
-    if st.button("Save Measurements"):
-        # Logic to capture and save measurements (e.g., to a database or file)
-        st.success("Measurements saved successfully!")
+    st.subheader("Customer Satisfaction Survey")
+    satisfaction_level = st.slider("How easy was the process for the customer? (1 - Very Difficult, 5 - Very Easy)", min_value=1, max_value=5)
+
+    if st.button("Save Measurements and Survey"):
+        save_measurements_and_survey(measurements, satisfaction_level)
+        st.success("Measurements and survey saved successfully!")
+
+def save_measurements_and_survey(measurements, satisfaction_level):
+    # Logic to save measurements and survey responses
+    with open("customer_measurements.txt", "a") as file:
+        for measurement, value in measurements.items():
+            file.write(f"{measurement}: {value} inches\n")
+        file.write(f"Customer Satisfaction: {satisfaction_level}\n")
 
 if __name__ == "__main__":
     main()
