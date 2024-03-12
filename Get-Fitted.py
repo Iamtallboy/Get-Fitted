@@ -1,4 +1,22 @@
 import streamlit as st
+import sqlite3
+
+# Create a connection to the SQLite database
+conn = sqlite3.connect('customer_data.db')
+c = conn.cursor()
+
+# Create a table to store customer data if it doesn't already exist
+c.execute('''CREATE TABLE IF NOT EXISTS customer_data (
+             id INTEGER PRIMARY KEY,
+             first_name TEXT,
+             last_name TEXT,
+             phone_number TEXT,
+             email_address TEXT,
+             social_media_handle TEXT,
+             measurements TEXT,
+             satisfaction_level INTEGER
+             )''')
+conn.commit()
 
 def main():
     st.title("Custom Suit Fitting App")
@@ -73,16 +91,13 @@ def main():
         st.success("Measurements and survey saved successfully!")
 
 def save_data(first_name, last_name, phone_number, email_address, social_media_handle, measurements, satisfaction_level):
-    # Logic to save data (e.g., to a database or file)
-    with open("customer_data.txt", "a") as file:
-        file.write(f"Name: {first_name} {last_name}\n")
-        file.write(f"Phone Number: {phone_number}\n")
-        file.write(f"Email Address: {email_address}\n")
-        file.write(f"Social Media Handle: {social_media_handle}\n")
-        file.write("Measurements:\n")
-        for measurement, value in measurements.items():
-            file.write(f"{measurement}: {value} inches\n")
-        file.write(f"Customer Satisfaction: {satisfaction_level}\n")
+    # Convert measurements dictionary to a string
+    measurements_str = ', '.join([f'{key}: {value}' for key, value in measurements.items()])
+
+    # Insert data into the SQLite database
+    c.execute("INSERT INTO customer_data (first_name, last_name, phone_number, email_address, social_media_handle, measurements, satisfaction_level) VALUES (?, ?, ?, ?, ?, ?, ?)",
+              (first_name, last_name, phone_number, email_address, social_media_handle, measurements_str, satisfaction_level))
+    conn.commit()
 
 if __name__ == "__main__":
     main()
